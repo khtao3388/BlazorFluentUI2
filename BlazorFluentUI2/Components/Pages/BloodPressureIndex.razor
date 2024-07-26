@@ -1,0 +1,67 @@
+﻿  @page "/BloodPressures"
+
+ 
+  @inject BloodPressureContext context
+
+<h3>Blood Pressure</h3>
+
+<p>
+    <a href="bloodpressures/create">Create New</a>
+</p>
+
+@if (bloodPressures == null)
+  {
+      <p>Loading...</p>
+  }
+  else
+  {
+      <table class="table-striped table-primary table">
+          <thead class="fs-5 fw-bold">
+              <tr>
+                  <th>ID</th>
+                  <th>Date and Time</th>
+                  <th>Systolic</th>
+                  <th>Diastolic</th>
+                  <th>Heart Rate</th>
+              </tr>
+          </thead>
+          <tbody class="fs-5">
+              @foreach (var bp in bloodPressures)
+              {
+                  <tr>
+                      <td>@bp.Id</td>
+                      <td>@bp.DateAndTime.ToString("dd MMM yyyy HH:mm")</td>
+                      <td>@bp.Systolic</td>
+                      <td>@bp.Diastolic</td>
+                      <td>@bp.HeartRate</td>
+                    <td><a href=@($"bloodpressures/delete?id={bp.Id}")>Delete</a></td>
+                    <td><a href=@($"bloodpressures/edit?id={bp.Id}")>Edit</a></td>
+                      
+                  </tr>
+              }
+          </tbody>
+      </table>
+  }
+
+<FluentDataGrid Id="priceData" Items="@bloodPressuresQ" GridTemplateColumns="1fr 1fr" TGridItem="BloodPressure">
+    <PropertyColumn Title="Date and Time" Property="@(c => c!.DateAndTime)" Align="Align.Start" />
+    <PropertyColumn Title="Systolic" Property="@(c => c!.Systolic)" Align="Align.Center" />
+</FluentDataGrid>
+
+@code {
+
+    private List<BloodPressure> bloodPressures;
+
+    IQueryable<BloodPressure> bloodPressuresQ = new[]
+
+    {
+            new BloodPressure { DateAndTime = DateTime.Now, Systolic = 128, Diastolic= 62, HeartRate=56 }
+        }.AsQueryable();
+
+    protected override void OnInitialized()
+    {
+        bloodPressures = context.BloodPressures.ToList();
+        bloodPressuresQ = bloodPressures.AsQueryable();
+    }
+  }
+

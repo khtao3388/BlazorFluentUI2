@@ -1,0 +1,34 @@
+﻿@page "/PriceIndex"
+
+
+<h3>Price Index</h3>
+
+<FluentTimePicker @bind-Value="@SelectedValue" Label="Meeting time:" />
+<p>Selected Time: @(SelectedValue?.ToString("HH:mm"))</p>
+
+<FluentDataGrid Id="priceData" Items="@priceData" GridTemplateColumns="1fr 1fr" TGridItem="PriceData">
+    <PropertyColumn Title="DateTime" Property="@(c => c!.DateTime)" Align="Align.Start" />
+    <PropertyColumn Title="Price" Property="@(c => c!.Price)" Align="Align.Center" />
+</FluentDataGrid>
+
+@code {
+
+    private DateTime? SelectedValue = null;
+    record PriceData
+    {
+        public DateTime DateTime { get; set; }
+        public decimal Price { get; set; }
+    }
+    
+    IQueryable<PriceData> priceData = new[]
+    
+    {
+            new PriceData { DateTime = DateTime.Now, Price = 100.50m },
+            new PriceData { DateTime = DateTime.Now.AddDays(1), Price = 105.75m },
+            new PriceData { DateTime = DateTime.Now.AddDays(2), Price = 102.25m },
+            new PriceData { DateTime = DateTime.Now.AddDays(3), Price = 98.75m },
+            new PriceData { DateTime = DateTime.Now.AddDays(4), Price = 103.50m }
+        }.AsQueryable();
+    
+          
+}

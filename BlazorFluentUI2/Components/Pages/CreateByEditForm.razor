@@ -1,0 +1,63 @@
+﻿@page "/create"
+
+
+
+<h3>CreateByEditForm</h3>
+
+@inject BloodPressureContext context
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>BloodPressure</h4>
+<hr />
+
+<EditForm method="post" FormName="Create" Model="BloodPressure" OnInvalidSubmit="AddBloodPressureAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" />
+    
+    <div class="mb-3">
+        <label for="date" class="form-label">Date and Time</label>
+        <InputDate id="date" @bind-Value="BloodPressure.DateAndTime" class="form-control" />
+        <ValidationMessage For="() => BloodPressure.DateAndTime" class="text-danger" />
+
+        <label for="systolic" class="form-label">Systolic</label>
+        <InputNumber id="systolic" @bind-Value="BloodPressure.Systolic" class="form-control" />
+        <ValidationMessage For="() => BloodPressure.Systolic" class="text-danger" />
+
+        <label for="diastolic" class="form-label">Dialatic:</label>
+        <InputNumber id="diastolic" @bind-Value="BloodPressure.Diastolic" class="form-control" />
+        <ValidationMessage For="() => BloodPressure.Diastolic" class="text-danger" />
+
+        <label for="heartrate" class="form-label">HeartRate:</label>
+        <InputNumber id="heartrate" @bind-Value="BloodPressure.HeartRate" class="form-control" />
+        <ValidationMessage For="() => BloodPressure.HeartRate" class="text-danger" />
+
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+
+
+</EditForm>
+
+
+<div>
+    <a href="/bloodpressures">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public BloodPressure BloodPressure { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddBloodPressureAsync()
+    {
+        context.BloodPressures.Add(BloodPressure);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/bloodpressures");
+    }
+}
+
+
